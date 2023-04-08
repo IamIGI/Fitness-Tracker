@@ -1,0 +1,32 @@
+<mat-nav-list>
+  <mat-list-item>
+    <a routerLink="/signup" (click)="onClose()">
+      <div class="nav-option">
+        <mat-icon>face</mat-icon> <span class="nav-caption">Signup</span>
+      </div>
+    </a>
+  </mat-list-item>
+  <mat-list-item>
+    <a routerLink="/login" (click)="onClose()">
+      <div class="nav-option">
+        <mat-icon>input</mat-icon> <span class="nav-caption">Login</span>
+      </div>
+    </a>
+  </mat-list-item>
+  <mat-list-item>
+    <a routerLink="/training" (click)="onClose()">
+      <div class="nav-option">
+        <mat-icon>fitness_center</mat-icon>
+        <span class="nav-caption">Training</span>
+      </div>
+    </a>
+  </mat-list-item>
+  <mat-list-item>
+    <a (click)="onClose()">
+      <div class="nav-option">
+        <mat-icon>eject</mat-icon>
+        <span class="nav-caption">Logout</span>
+      </div>
+    </a>
+  </mat-list-item>
+</mat-nav-list>
