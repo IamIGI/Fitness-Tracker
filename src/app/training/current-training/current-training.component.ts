@@ -46,7 +46,6 @@ export class CurrentTrainingComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log('here');
         this.router.navigate(['/training']);
         this.trainingService.cancelExercise(this.progress);
       } else {
