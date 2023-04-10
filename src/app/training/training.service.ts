@@ -21,7 +21,6 @@ export class TrainingService {
 
   private availableExercises: Exercise[] = [];
   private runningExercise!: Exercise | null;
-  private finishedExercises: Exercise[] = [];
 
   fetchAvailableExercises() {
     collectionData(collection(this.firestore, 'availableExercises'), {
@@ -44,10 +43,10 @@ export class TrainingService {
 
   startExercise(selectedId: string) {
     //dummy update --------------
-    updateDoc(
-      doc(collection(this.firestore, 'availableExercises'), selectedId),
-      { lastSelected: new Date() }
-    );
+    // updateDoc(
+    //   doc(collection(this.firestore, 'availableExercises'), selectedId),
+    //   { lastSelected: new Date() }
+    // );
     //-------------------------
 
     this.runningExercise = this.availableExercises.find(
@@ -87,7 +86,6 @@ export class TrainingService {
     collectionData(collection(this.firestore, 'finishedExercises'))
       .pipe(
         map((docArray) => {
-          console.log(docArray);
           return docArray.map((doc) => {
             return {
               ...doc,
@@ -101,7 +99,6 @@ export class TrainingService {
   }
 
   private addDataToDatabase(exercise: Exercise) {
-    // collection(this.firestore, 'finishedExercises').add(exercise)
     addDoc(collection(this.firestore, 'finishedExercises'), exercise);
   }
 }

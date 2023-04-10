@@ -26,8 +26,6 @@ export class PastTrainingsComponent {
     this.exChangedSubscription =
       this.trainingService.finishedExercisesChanged.subscribe(
         (exercises: Exercise[]) => {
-          console.log(exercises[0]);
-          console.log(exercises[0].date);
           this.dataSource.data = exercises;
         }
       );
