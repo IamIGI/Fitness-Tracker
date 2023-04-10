@@ -1,5 +1,13 @@
 import { inject } from '@angular/core';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  addDoc,
+  updateDoc,
+  doc,
+  deleteDoc,
+} from '@angular/fire/firestore';
 import { Exercise } from './exercise.model';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs';
@@ -9,10 +17,10 @@ export class TrainingService {
 
   exerciseChanged = new Subject<Exercise | null>();
   exercisesChanged = new Subject<Exercise[]>();
+  finishedExercisesChanged = new Subject<Exercise[]>();
 
   private availableExercises: Exercise[] = [];
   private runningExercise!: Exercise | null;
-  private exercises: Exercise[] = [];
 
   fetchAvailableExercises() {
     collectionData(collection(this.firestore, 'availableExercises'), {
@@ -34,6 +42,13 @@ export class TrainingService {
   }
 
   startExercise(selectedId: string) {
+    //dummy update --------------
+    // updateDoc(
+    //   doc(collection(this.firestore, 'availableExercises'), selectedId),
+    //   { lastSelected: new Date() }
+    // );
+    //-------------------------
+
     this.runningExercise = this.availableExercises.find(
       (ex) => ex.id == selectedId
     ) as Exercise;
@@ -41,7 +56,7 @@ export class TrainingService {
   }
 
   completeExercise() {
-    this.exercises.push({
+    this.addDataToDatabase({
       ...(this.runningExercise as Exercise),
       date: new Date(),
       state: 'completed',
@@ -58,7 +73,7 @@ export class TrainingService {
       date: new Date(),
       state: 'cancelled',
     };
-    this.exercises.push(currentExercise);
+    this.addDataToDatabase(currentExercise);
     this.runningExercise = null;
     this.exerciseChanged.next(null);
   }
@@ -67,7 +82,23 @@ export class TrainingService {
     return { ...this.runningExercise };
   }
 
-  getCompletedOrCancelledExercises() {
-    return this.exercises.slice();
+  fetchCompletedOrCancelledExercises() {
+    collectionData(collection(this.firestore, 'finishedExercises'))
+      .pipe(
+        map((docArray) => {
+          return docArray.map((doc) => {
+            return {
+              ...doc,
+            } as Exercise;
+          });
+        })
+      )
+      .subscribe((exercise: Exercise[]) => {
+        this.finishedExercisesChanged.next(exercise);
+      });
+  }
+
+  private addDataToDatabase(exercise: Exercise) {
+    addDoc(collection(this.firestore, 'finishedExercises'), exercise);
   }
 }
