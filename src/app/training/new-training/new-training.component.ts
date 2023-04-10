@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { TrainingService } from '../training.service';
 import { Exercise } from '../exercise.model';
 import { NgForm } from '@angular/forms';
@@ -9,15 +11,24 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./new-training.component.sass'],
 })
 export class NewTrainingComponent {
-  exercises: Exercise[] = [];
+  exerciseSubscription!: Subscription;
+  exercises!: Exercise[];
 
   constructor(private trainingService: TrainingService) {}
 
   ngOnInit() {
-    this.exercises = this.trainingService.getAvailableExercises();
+    this.exerciseSubscription = this.trainingService.exercisesChanged.subscribe(
+      (exercises) => (this.exercises = exercises)
+    );
+    this.trainingService.fetchAvailableExercises();
   }
 
   onStartTraining(form: NgForm) {
     this.trainingService.startExercise(form.value.exercise);
+  }
+
+  ngOnDestroy() {
+    console.log('new-training onDestroy');
+    this.exerciseSubscription.unsubscribe();
   }
 }

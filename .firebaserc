@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "fitnesstrackerapp-affbc": {
+      "hosting": {
+        "fintess-tracker": [
+          "fitnesstrackerapp-affbc"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "fitnesstrackerapp-affbc"
+  }
+}
