@@ -28,7 +28,6 @@ export class NewTrainingComponent {
   }
 
   ngOnDestroy() {
-    console.log('new-training onDestroy');
     this.exerciseSubscription.unsubscribe();
   }
 }

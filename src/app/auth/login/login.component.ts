@@ -25,9 +25,10 @@ export class LoginComponent {
 
   onSubmit() {
     const authData: AuthData = {
-      email: this.loginForm.value.email,
-      password: this.loginForm.value.password,
+      email: this.loginForm.value.emailField,
+      password: this.loginForm.value.passwordField,
     };
     this.authService.login(authData);
+    this.loginForm.reset();
   }
 }

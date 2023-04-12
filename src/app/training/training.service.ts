@@ -35,9 +35,14 @@ export class TrainingService {
           });
         })
       )
-      .subscribe((exercise: Exercise[]) => {
-        this.availableExercises = exercise;
-        this.exercisesChanged.next([...this.availableExercises]);
+      .subscribe({
+        next: (exercise: Exercise[]) => {
+          this.availableExercises = exercise;
+          this.exercisesChanged.next([...this.availableExercises]);
+        },
+        error: (error) => {
+          console.log(error);
+        },
       });
   }
 
@@ -93,8 +98,13 @@ export class TrainingService {
           });
         })
       )
-      .subscribe((exercise: Exercise[]) => {
-        this.finishedExercisesChanged.next(exercise);
+      .subscribe({
+        next: (exercise: Exercise[]) => {
+          this.finishedExercisesChanged.next(exercise);
+        },
+        error: (error) => {
+          console.log(error);
+        },
       });
   }
 
