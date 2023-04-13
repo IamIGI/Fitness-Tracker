@@ -26,6 +26,7 @@ export class AuthService {
         this.router.navigate(['/training']);
       } else {
         //logout
+        this.trainingService.clearFirestoreSubscription();
         this.isAuthenticated = false;
         this.authChange.next(false); //false means you are logout
         this.router.navigate(['/login']);
@@ -41,10 +42,16 @@ export class AuthService {
   }
 
   login(authData: AuthData) {
-    this.afAuth
+    return this.afAuth
       .signInWithEmailAndPassword(authData.email, authData.password)
-      .then((response) => {})
-      .catch((err) => console.log(err));
+      .then((response) => {
+        return true;
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+        return false;
+      });
   }
 
   logout() {

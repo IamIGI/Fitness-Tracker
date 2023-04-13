@@ -28,7 +28,8 @@ export class LoginComponent {
       email: this.loginForm.value.emailField,
       password: this.loginForm.value.passwordField,
     };
-    this.authService.login(authData);
-    this.loginForm.reset();
+    this.authService.login(authData).finally(() => {
+      this.loginForm.reset();
+    });
   }
 }

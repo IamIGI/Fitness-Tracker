@@ -10,10 +10,12 @@ import {
 } from '@angular/fire/firestore';
 import { Exercise } from './exercise.model';
 import { Subject } from 'rxjs';
-import { map } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 
 export class TrainingService {
   firestore: Firestore = inject(Firestore);
+  private sub1 = new Subscription();
+  private sub2 = new Subscription();
 
   exerciseChanged = new Subject<Exercise | null>();
   exercisesChanged = new Subject<Exercise[]>();
@@ -23,9 +25,12 @@ export class TrainingService {
   private runningExercise!: Exercise | null;
 
   fetchAvailableExercises() {
-    collectionData(collection(this.firestore, 'availableExercises'), {
-      idField: 'id',
-    })
+    this.sub1 = collectionData(
+      collection(this.firestore, 'availableExercises'),
+      {
+        idField: 'id',
+      }
+    )
       .pipe(
         map((docArray) => {
           return docArray.map((doc) => {
@@ -88,7 +93,7 @@ export class TrainingService {
   }
 
   fetchCompletedOrCancelledExercises() {
-    collectionData(collection(this.firestore, 'finishedExercises'))
+    this.sub2 = collectionData(collection(this.firestore, 'finishedExercises'))
       .pipe(
         map((docArray) => {
           return docArray.map((doc) => {
@@ -110,5 +115,10 @@ export class TrainingService {
 
   private addDataToDatabase(exercise: Exercise) {
     addDoc(collection(this.firestore, 'finishedExercises'), exercise);
+  }
+
+  clearFirestoreSubscription() {
+    this.sub1.unsubscribe();
+    this.sub2.unsubscribe();
   }
 }
