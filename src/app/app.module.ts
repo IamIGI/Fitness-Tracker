@@ -25,6 +25,9 @@ import { UIService } from './shared/ui.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthModule } from './auth/auth.module';
+//Reducer
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './app.reducer';
 
 @NgModule({
   declarations: [
@@ -50,6 +53,7 @@ import { AuthModule } from './auth/auth.module';
     AppRoutingModule,
     FlexLayoutModule,
     AuthModule,
+    StoreModule.forRoot(reducers, {}),
   ],
   providers: [AuthService, TrainingService, UIService],
   bootstrap: [AppComponent],

@@ -1,6 +1,6 @@
 <section fxLayoutAlign="center center">
   <form
-    *ngIf="!isLoading"
+    *ngIf="!(isLoading$ | async)"
     fxLayout="column"
     fxLayoutAlign="center center"
     fxLayoutGap="10px"
@@ -43,5 +43,5 @@
       Login
     </button>
   </form>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
 </section>
