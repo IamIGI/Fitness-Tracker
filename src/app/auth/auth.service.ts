@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
@@ -10,7 +9,6 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from '../app.reducer';
 import * as UI from '../shared/ui.actions';
 import * as Auth from './auth.actions';
-import { throwMatDuplicatedDrawerError } from '@angular/material/sidenav';
 
 @Injectable()
 export class AuthService {

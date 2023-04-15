@@ -1,5 +1,3 @@
-import { Action } from '@ngrx/store';
-
 import * as AuthActions from './auth.actions';
 
 export interface State {
