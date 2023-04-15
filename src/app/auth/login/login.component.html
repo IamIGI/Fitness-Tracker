@@ -1,43 +1,47 @@
-<form
-  fxLayout="column"
-  fxLayoutAlign="center center"
-  fxLayoutGap="10px"
-  [formGroup]="loginForm"
-  (ngSubmit)="onSubmit()"
->
-  <mat-form-field>
-    <input
-      type="email"
-      matInput
-      placeholder="Email"
-      formControlName="emailField"
-    />
-    <mat-error
-      *ngIf="loginForm.get('emailField')?.errors
-    ?.['required']"
-      >This field is required</mat-error
-    >
-    <mat-error *ngIf="loginForm.get('emailField')?.errors?.['email']"
-      >E-mail is invalid</mat-error
-    >
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      type="password"
-      matInput
-      placeholder="Password"
-      formControlName="passwordField"
-    />
-    <mat-error *ngIf="loginForm.get('passwordField')?.errors?.['required']"
-      >Password is required</mat-error
-    >
-  </mat-form-field>
-  <button
-    type="submit"
-    mat-raised-button
-    color="primary"
-    [disabled]="!loginForm.valid"
+<section fxLayoutAlign="center center">
+  <form
+    *ngIf="!isLoading"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap="10px"
+    [formGroup]="loginForm"
+    (ngSubmit)="onSubmit()"
   >
-    Login
-  </button>
-</form>
+    <mat-form-field>
+      <input
+        type="email"
+        matInput
+        placeholder="Email"
+        formControlName="emailField"
+      />
+      <mat-error
+        *ngIf="loginForm.get('emailField')?.errors
+    ?.['required']"
+        >This field is required</mat-error
+      >
+      <mat-error *ngIf="loginForm.get('emailField')?.errors?.['email']"
+        >E-mail is invalid</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        type="password"
+        matInput
+        placeholder="Password"
+        formControlName="passwordField"
+      />
+      <mat-error *ngIf="loginForm.get('passwordField')?.errors?.['required']"
+        >Password is required</mat-error
+      >
+    </mat-form-field>
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!loginForm.valid"
+    >
+      Login
+    </button>
+  </form>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+</section>
