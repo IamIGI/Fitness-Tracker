@@ -1,8 +1,9 @@
-<section class="signup-form">
+<section fxLayoutAlign="center center">
   <form
+    *ngIf="!isLoading"
     fxLayout="column"
     fxLayoutAlign="center center"
-    fxLayoutGap="10px"
+    fxLayoutGap="2px"
     #f="ngForm"
     (ngSubmit)="onSubmit(f)"
   >
@@ -69,4 +70,5 @@
       Submit
     </button>
   </form>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
 </section>

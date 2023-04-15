@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { Subscription } from 'rxjs';
 
 import { AuthData } from '../auth-data.model';
+import { UIService } from 'src/app/shared/ui.service';
 
 @Component({
   selector: 'app-login',
@@ -11,10 +13,15 @@ import { AuthData } from '../auth-data.model';
 })
 export class LoginComponent {
   loginForm!: FormGroup;
+  isLoading = false;
+  private loadingSubs = new Subscription();
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private uiService: UIService) {}
 
   ngOnInit() {
+    this.loadingSubs = this.uiService.loadingStateChanged.subscribe(
+      (loadingState) => (this.isLoading = loadingState)
+    );
     this.loginForm = new FormGroup({
       emailField: new FormControl('', {
         validators: [Validators.required, Validators.email],
@@ -31,5 +38,9 @@ export class LoginComponent {
     this.authService.login(authData).finally(() => {
       this.loginForm.reset();
     });
+  }
+
+  ngOnDestroy() {
+    this.loadingSubs.unsubscribe();
   }
 }
