@@ -22,7 +22,6 @@ import { provideMessaging, getMessaging } from '@angular/fire/messaging';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { AngularFireModule } from '@angular/fire/compat';
 import { UIService } from './shared/ui.service';
-import { TrainingModule } from './training/training.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthModule } from './auth/auth.module';
@@ -50,7 +49,6 @@ import { AuthModule } from './auth/auth.module';
     MaterialModule,
     AppRoutingModule,
     FlexLayoutModule,
-    TrainingModule,
     AuthModule,
   ],
   providers: [AuthService, TrainingService, UIService],
