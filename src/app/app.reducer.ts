@@ -4,16 +4,21 @@ import {
   createSelector,
 } from '@ngrx/store';
 import * as fromUI from './shared/ui.reducer';
-import { UIActions } from './shared/ui.actions';
+import * as fromAuth from './auth/auth.reducer';
 
 export interface State {
   ui: fromUI.State;
+  auth: fromAuth.State;
 }
 
-export const reducers: ActionReducerMap<State, UIActions> = {
+export const reducers: ActionReducerMap<State, any> = {
   ui: fromUI.uiReducer,
+  auth: fromAuth.authReducer,
 };
 
 // call function and get the given state
 export const getUIState = createFeatureSelector<fromUI.State>('ui');
 export const getIsLoading = createSelector(getUIState, fromUI.getIsLoading);
+
+export const getAuthState = createFeatureSelector<fromAuth.State>('auth');
+export const getIsAuth = createSelector(getAuthState, fromAuth.getIsAuth);

@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
+
+import { Store } from '@ngrx/store';
+import * as fromRoot from 'src/app/app.reducer';
 
 @Component({
   selector: 'app-sidenav-list',
@@ -9,15 +12,16 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class SidenavListComponent {
   @Output() closeSidenav = new EventEmitter<void>();
-  isAuth: boolean = false;
+  isAuth$ = new Observable<boolean>();
   authSubscription = new Subscription();
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private store: Store<fromRoot.State>
+  ) {}
 
   ngOnInit() {
-    this.authSubscription = this.authService.authChange.subscribe(
-      (authStatus) => (this.isAuth = authStatus)
-    );
+    this.isAuth$ = this.store.select(fromRoot.getIsAuth);
   }
 
   onClose() {
@@ -27,9 +31,5 @@ export class SidenavListComponent {
   onLogout() {
     this.onClose();
     this.authService.logout();
-  }
-
-  ngOnDestroy() {
-    this.authSubscription.unsubscribe();
   }
 }
