@@ -15,7 +15,7 @@ import * as fromRoot from 'src/app/app.reducer';
 })
 export class SignupComponent {
   maxDate: Date = new Date();
-  isLoading$ = new Observable();
+  isLoading$ = new Observable<boolean>();
 
   constructor(
     private authService: AuthService,
