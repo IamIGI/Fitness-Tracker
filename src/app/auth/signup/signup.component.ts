@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { AuthService } from '../auth.service';
 import { AuthData } from '../auth-data.model';
 import { UIService } from 'src/app/shared/ui.service';
+import { Store, select } from '@ngrx/store';
+import * as fromRoot from 'src/app/app.reducer';
 
 @Component({
   selector: 'app-signup',
@@ -13,15 +15,15 @@ import { UIService } from 'src/app/shared/ui.service';
 })
 export class SignupComponent {
   maxDate: Date = new Date();
-  isLoading = false;
-  private loadingSubs = new Subscription();
+  isLoading$ = new Observable();
 
-  constructor(private authService: AuthService, private uiService: UIService) {}
+  constructor(
+    private authService: AuthService,
+    private store: Store<fromRoot.State>
+  ) {}
 
   ngOnInit() {
-    this.loadingSubs = this.uiService.loadingStateChanged.subscribe(
-      (loadingState) => (this.isLoading = loadingState)
-    );
+    this.isLoading$ = this.store.pipe(select(fromRoot.getIsLoading));
 
     this.maxDate = new Date();
     this.maxDate.setFullYear(this.maxDate.getFullYear() - 18); //get 18 years ago date
@@ -33,11 +35,5 @@ export class SignupComponent {
       password: form.value.password,
     };
     this.authService.registerUser(newUserObject);
-  }
-
-  ngOnDestroy() {
-    if (this.loadingSubs) {
-      this.loadingSubs.unsubscribe();
-    }
   }
 }

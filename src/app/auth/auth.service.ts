@@ -6,6 +6,9 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthData } from './auth-data.model';
 import { TrainingService } from '../training/training.service';
 import { UIService } from '../shared/ui.service';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../app.reducer';
+import * as UI from '../shared/ui.actions';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +19,8 @@ export class AuthService {
     private router: Router,
     private afAuth: AngularFireAuth,
     private trainingService: TrainingService,
-    private uiService: UIService
+    private uiService: UIService,
+    private store: Store<fromRoot.State>
   ) {}
 
   initAuthListener() {
@@ -37,7 +41,7 @@ export class AuthService {
   }
 
   registerUser(authData: AuthData) {
-    this.uiService.loadingStateChanged.next(true);
+    this.store.dispatch(new UI.StartLoading());
     this.afAuth
       .createUserWithEmailAndPassword(authData.email, authData.password)
       .then((response) => {})
@@ -45,12 +49,12 @@ export class AuthService {
         this.uiService.showSnackbar(err.message, undefined, 3000)
       )
       .finally(() => {
-        this.uiService.loadingStateChanged.next(false);
+        this.store.dispatch(new UI.StopLoading());
       });
   }
 
   async login(authData: AuthData) {
-    this.uiService.loadingStateChanged.next(true);
+    this.store.dispatch(new UI.StartLoading());
     this.afAuth
       .signInWithEmailAndPassword(authData.email, authData.password)
       .then((response) => {})
@@ -58,7 +62,7 @@ export class AuthService {
         this.uiService.showSnackbar(err.message, undefined, 3000);
       })
       .finally(() => {
-        this.uiService.loadingStateChanged.next(false);
+        this.store.dispatch(new UI.StopLoading());
       });
   }
 
