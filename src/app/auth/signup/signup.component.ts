@@ -34,4 +34,10 @@ export class SignupComponent {
     };
     this.authService.registerUser(newUserObject);
   }
+
+  ngOnDestroy() {
+    if (this.loadingSubs) {
+      this.loadingSubs.unsubscribe();
+    }
+  }
 }

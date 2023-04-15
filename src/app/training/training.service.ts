@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   Firestore,
   collection,
@@ -11,7 +11,9 @@ import {
 import { Exercise } from './exercise.model';
 import { Subject } from 'rxjs';
 import { map, Subscription } from 'rxjs';
+import { UIService } from '../shared/ui.service';
 
+@Injectable()
 export class TrainingService {
   firestore: Firestore = inject(Firestore);
   private sub1 = new Subscription();
@@ -23,6 +25,8 @@ export class TrainingService {
 
   private availableExercises: Exercise[] = [];
   private runningExercise!: Exercise | null;
+
+  constructor(private uiService: UIService) {}
 
   fetchAvailableExercises() {
     this.sub1 = collectionData(
@@ -46,7 +50,12 @@ export class TrainingService {
           this.exercisesChanged.next([...this.availableExercises]);
         },
         error: (error) => {
-          console.log(error);
+          this.uiService.showSnackbar(
+            'Fetching Exercise failed, please try again later',
+            undefined,
+            3000
+          );
+          this.exerciseChanged.next(null);
         },
       });
   }

@@ -20,14 +20,18 @@ export class NewTrainingComponent {
     this.exerciseSubscription = this.trainingService.exercisesChanged.subscribe(
       (exercises) => (this.exercises = exercises)
     );
-    this.trainingService.fetchAvailableExercises();
+    this.fetchExercises();
   }
 
   onStartTraining(form: NgForm) {
     this.trainingService.startExercise(form.value.exercise);
   }
 
+  fetchExercises() {
+    this.trainingService.fetchAvailableExercises();
+  }
+
   ngOnDestroy() {
-    this.exerciseSubscription.unsubscribe();
+    if (this.exerciseSubscription) this.exerciseSubscription.unsubscribe();
   }
 }
