@@ -65,7 +65,6 @@ export class TrainingService {
     //   { lastSelected: new Date() }
     // );
     //-------------------------
-    console.log(selectedId);
     this.store.dispatch(new trainingActions.StartTraining(selectedId));
   }
 
