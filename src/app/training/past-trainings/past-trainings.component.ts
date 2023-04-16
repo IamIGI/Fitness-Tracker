@@ -4,7 +4,9 @@ import { Exercise } from '../exercise.model';
 import { TrainingService } from '../training.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { Subscription } from 'rxjs';
+
+import { Store } from '@ngrx/store';
+import * as fromTraining from '../training.reducer';
 
 @Component({
   selector: 'app-past-trainings',
@@ -15,20 +17,20 @@ export class PastTrainingsComponent {
   displayedColumns = ['date', 'name', 'duration', 'calories', 'state'];
   dataSource = new MatTableDataSource<Exercise>(); //provide object of item provided as array
 
-  private exChangedSubscription!: Subscription;
-
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private trainingService: TrainingService) {}
+  constructor(
+    private trainingService: TrainingService,
+    private store: Store<fromTraining.State>
+  ) {}
 
   ngOnInit() {
-    this.exChangedSubscription =
-      this.trainingService.finishedExercisesChanged.subscribe(
-        (exercises: Exercise[]) => {
-          this.dataSource.data = exercises;
-        }
-      );
+    this.store
+      .select(fromTraining.getFinishedExercises)
+      .subscribe((exercises: Exercise[]) => {
+        this.dataSource.data = exercises;
+      });
     this.trainingService.fetchCompletedOrCancelledExercises();
   }
 
@@ -39,9 +41,5 @@ export class PastTrainingsComponent {
 
   doFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  ngOnDestroy() {
-    if (this.exChangedSubscription) this.exChangedSubscription.unsubscribe();
   }
 }
