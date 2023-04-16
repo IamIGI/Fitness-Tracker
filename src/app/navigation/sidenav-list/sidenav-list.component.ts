@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Subscription, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 
 import { Store } from '@ngrx/store';
@@ -13,7 +13,6 @@ import * as fromRoot from 'src/app/app.reducer';
 export class SidenavListComponent {
   @Output() closeSidenav = new EventEmitter<void>();
   isAuth$ = new Observable<boolean>();
-  authSubscription = new Subscription();
 
   constructor(
     private authService: AuthService,
